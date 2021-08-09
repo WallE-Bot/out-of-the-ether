@@ -6,7 +6,8 @@ import ReactJson from "react-json-view";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
-import { Account, Address, AddressInput, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
+import { Account, Address, AddressInput, Contract, Main,
+        Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
 import {INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
@@ -131,7 +132,8 @@ const logoutOfWeb3Modal = async () => {
 };
 
 function App(props) {
-  const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
+  //const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
+  const mainnetProvider = mainnetInfura;
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
@@ -194,28 +196,28 @@ function App(props) {
   ]);
 
   // keep track of a variable from the contract in the local React state:
-  const balance = useContractReader(readContracts, "YourCollectible", "balanceOf", [address]);
+  const balance = useContractReader(readContracts, "OutOfTheEtherPrint", "balanceOf", [address]);
   console.log("🤗 balance:", balance);
 
   // 📟 Listen for broadcast events
-  const transferEvents = useEventListener(readContracts, "YourCollectible", "Transfer", localProvider, 1);
+  const transferEvents = useEventListener(readContracts, "OutOfTheEtherPrint", "Transfer", localProvider, 1);
   console.log("📟 Transfer events:", transferEvents);
 
   //
-  // 🧠 This effect will update yourCollectibles by polling when your balance changes
+  // 🧠 This effect will update outOfTheEtherPrints by polling when your balance changes
   //
   const yourBalance = balance && balance.toNumber && balance.toNumber();
-  const [yourCollectibles, setYourCollectibles] = useState();
+  const [outOfTheEtherPrints, setOutOfTheEtherPrints] = useState();
 
   useEffect(() => {
-    const updateYourCollectibles = async () => {
+    const updateOutOfTheEtherPrints = async () => {
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
         try {
           console.log("GEtting token index", tokenIndex);
-          const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
+          const tokenId = await readContracts.OutOfTheEtherPrint.tokenOfOwnerByIndex(address, tokenIndex);
           console.log("tokenId", tokenId);
-          const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
+          const tokenURI = await readContracts.OutOfTheEtherPrint.tokenURI(tokenId);
           console.log("tokenURI", tokenURI);
 
           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
@@ -234,9 +236,9 @@ function App(props) {
           console.log(e);
         }
       }
-      setYourCollectibles(collectibleUpdate);
+      setOutOfTheEtherPrints(collectibleUpdate);
     };
-    updateYourCollectibles();
+    updateOutOfTheEtherPrints();
   }, [address, yourBalance]);
 
   /*
@@ -434,7 +436,7 @@ function App(props) {
               }}
               to="/"
             >
-              YourCollectibles
+              OutOfTheEtherPrints
             </Link>
           </Menu.Item>
           <Menu.Item key="/transfers">
@@ -477,6 +479,16 @@ function App(props) {
               Debug Contracts
             </Link>
           </Menu.Item>
+          <Menu.Item key="/main">
+            <Link
+              onClick={() => {
+                setRoute("/main");
+              }}
+              to="/main"
+            >
+              Main
+            </Link>
+          </Menu.Item>
         </Menu>
 
         <Switch>
@@ -489,7 +501,7 @@ function App(props) {
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <List
                 bordered
-                dataSource={yourCollectibles}
+                dataSource={outOfTheEtherPrints}
                 renderItem={item => {
                   const id = item.id.toNumber();
                   return (
@@ -528,7 +540,7 @@ function App(props) {
                         <Button
                           onClick={() => {
                             console.log("writeContracts", writeContracts);
-                            tx(writeContracts.YourCollectible.transferFrom(address, transferToAddresses[id], id));
+                            tx(writeContracts.OutOfTheEtherPrint.transferFrom(address, transferToAddresses[id], id));
                           }}
                         >
                           Transfer
@@ -635,11 +647,32 @@ function App(props) {
           </Route>
           <Route path="/debugcontracts">
             <Contract
-              name="YourCollectible"
+              name="OutOfTheEtherPrint"
               signer={userSigner}
               provider={localProvider}
               address={address}
               blockExplorer={blockExplorer}
+            />
+          </Route>
+
+          <Route path="/main">
+          {/**
+            <Contract
+              name="OutOfTheEtherPrint"
+              signer={userSigner}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+            />
+          **/}
+
+            <Main
+              mintNFT= { (to, tokenURI) => {
+                return tx( writeContracts.OutOfTheEtherPrint.mintItem(
+                  to,
+                  tokenURI
+                ))
+              }}
             />
           </Route>
         </Switch>

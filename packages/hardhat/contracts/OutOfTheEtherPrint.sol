@@ -9,12 +9,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 // GET LISTED ON OPENSEA: https://testnets.opensea.io/get-listed/step-two
 
-contract YourCollectible is ERC721, Ownable {
+contract OutOfTheEtherPrint is ERC721, Ownable {
 
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
-  constructor() public ERC721("YourCollectible", "YCB") {
+  constructor() public ERC721("OutOfTheEtherPrint", "OTE") {
     _setBaseURI("https://ipfs.io/ipfs/");
   }
 
