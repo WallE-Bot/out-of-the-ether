@@ -656,21 +656,12 @@ function App(props) {
           </Route>
 
           <Route path="/main">
-          {/**
-            <Contract
-              name="OutOfTheEtherPrint"
-              signer={userSigner}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-            />
-          **/}
-
             <Main
-              mintNFT= { (to, tokenURI) => {
+              mintNFT={ (to, tokenURI) => {
                 return tx( writeContracts.OutOfTheEtherPrint.mintItem(
                   to,
-                  tokenURI
+                  tokenURI,
+                  {gasLimit:400000}
                 ))
               }}
             />
