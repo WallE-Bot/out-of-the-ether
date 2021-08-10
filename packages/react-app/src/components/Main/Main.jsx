@@ -7,12 +7,10 @@ import { Canvas } from '../../components';
 
 const Main = ({ mintNFT }) => {
 
-  const mintHandler = async () => {
+  const mintHandler = async (dataURL) => {
 
     // test image
-    const tokenURI = generateTokenURI(
-      'https://hcti.io/v1/image/c12626fb-15bd-4916-99e3-1721bedaf59c'
-    );
+    const tokenURI = generateTokenURI(dataURL);
 
     const returned = await mintNFT(
       '0xeF34d679Cb4217d1F7Bc81c02C4233D4Fd39566f',
@@ -22,13 +20,7 @@ const Main = ({ mintNFT }) => {
 
   return (
     <main>
-      <Canvas />
-      <button
-        className='mint-button'
-        onClick={mintHandler}
-      >
-        mint
-      </button>
+      <Canvas mintHandler={mintHandler}/>
     </main>
   )
 

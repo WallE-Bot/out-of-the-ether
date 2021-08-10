@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Canvas.css';
+import S3 from 'react-aws-s3';
 
-const Canvas = () => {
+const Canvas = ({ mintHandler }) => {
 
   const canvasRef = useRef(null);
   const [context, setContext] = useState(null);
@@ -35,9 +36,36 @@ const Canvas = () => {
     console.log(context);
     var dataUrl = context.canvas.toDataURL("image/jpeg");
     console.log(dataUrl);
-    var blobData = dataURIToBlob(dataUrl);
+    return dataUrl;
+    /*var blobData = dataURIToBlob(dataUrl);
     console.log(blobData);
+    uploadImg(blobData);*/
   };
+
+  const mint = async () => {
+    const dataURL = convertCanvasToDataURL();
+    const result = await mintHandler(dataURL);
+    console.log(result);
+  }
+
+  /*
+  const uploadImg = async (blobData) => {
+    const config = {
+      bucketName: 'myBucket',
+      dirName: 'media',
+      region: 'eu-west-1',
+      accessKeyId: 'JAJHAFJFHJDFJSDHFSDHFJKDSF',
+      secretAccessKey: 'jhsdf99845fd98qwed42ebdyeqwd-3r98f373f=qwrq3rfr3rf',
+    }
+
+    const ReactS3Client = new S3(config);
+
+    const newFileName = 'test-file';
+
+    const data = await ReactS3Client.uploadFile(file, newFileName)
+    console.log(data);
+  }
+  */
 
   return (
     <>
@@ -51,7 +79,7 @@ const Canvas = () => {
           marginTop: 10,
         }}
       ></canvas>
-      <button onClick={convertCanvasToDataURL}>convert</button>
+      <button onClick={mint}>mint</button>
     </>
   );
 

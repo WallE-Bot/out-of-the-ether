@@ -7,7 +7,7 @@ const generateTokenURI = async (image) => {
   const printMetaData = {
     "description": "Out of the Ether Print",
     "external_url": "https://hcti.io/v1/image/c12626fb-15bd-4916-99e3-1721bedaf59c",// <-- this can link to a page for the specific file too
-    "image": "https://hcti.io/v1/image/c12626fb-15bd-4916-99e3-1721bedaf59c",
+    "image": `${image}`,
     "name": "Out of the Ether",
     "attributes": [
        {
@@ -16,10 +16,11 @@ const generateTokenURI = async (image) => {
        }
     ]
   }
-  console.log("Uploading print...")
-  const uploaded = await ipfs.add(JSON.stringify(printMetaData))
 
-  return uploaded.path;
+  const uploaded = await ipfs.add(JSON.stringify(printMetaData))
+  const path = await uploaded.path;
+
+  return path;
 };
 
 export default generateTokenURI;
