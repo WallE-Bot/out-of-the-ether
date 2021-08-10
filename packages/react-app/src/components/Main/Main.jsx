@@ -2,6 +2,8 @@ import React from 'react';
 import './Main.css';
 import generateTokenURI from '../../helpers/generateTokenURI';
 import tryToDisplay from "../Contract/utils";
+import request from 'request';
+import { Canvas } from '../../components';
 
 const Main = ({ mintNFT }) => {
 
@@ -20,6 +22,7 @@ const Main = ({ mintNFT }) => {
 
   return (
     <main>
+      <Canvas />
       <button
         className='mint-button'
         onClick={mintHandler}
