@@ -10,7 +10,7 @@ const Canvas = ({ mintHandler }) => {
   const [width, setWidth] = useState(600);
 
   // constant depending on degree of width reduction in logo
-  const horizSkew = .1;
+  const horizSkew = .25;
   let fromMid = -4;
 
   const getRandomColor = () => {
@@ -47,6 +47,7 @@ const Canvas = ({ mintHandler }) => {
     context.lineWidth = 2;
     context.shadowColor = getRandomColor();
     context.shadowBlur = 5;
+    //context.rotate(45 * Math.PI / 180);
     context.stroke();
   }
 
@@ -148,7 +149,7 @@ const Canvas = ({ mintHandler }) => {
         width={width}
         height={height}
         style={{
-          border: '1px solid green'
+          background: 'black'
         }}
       ></canvas>
       <button className='mint-button' onClick={mint}>mint</button>

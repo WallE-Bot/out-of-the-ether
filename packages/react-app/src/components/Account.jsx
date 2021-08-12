@@ -59,7 +59,7 @@ export default function Account({
           key="logoutbutton"
           style={{ verticalAlign: "top", marginLeft: 8, marginTop: 4 }}
           shape="round"
-          size="large"
+          size="small"
           onClick={logoutOfWeb3Modal}
         >
           logout
@@ -71,7 +71,7 @@ export default function Account({
           key="loginbutton"
           style={{ verticalAlign: "top", marginLeft: 8, marginTop: 4 }}
           shape="round"
-          size="large"
+          size="small"
           /* type={minimized ? "default" : "primary"}     too many people just defaulting to MM and having a bad time */
           onClick={loadWeb3Modal}
         >
@@ -80,8 +80,6 @@ export default function Account({
       );
     }
   }
-
-  const { currentTheme } = useThemeSwitcher();
 
   const display = minimized ? (
     ""
@@ -99,13 +97,13 @@ export default function Account({
         signer={userSigner}
         ensProvider={mainnetProvider}
         price={price}
-        color={currentTheme === "light" ? "#1890ff" : "#2caad9"}
+        color={'white'}
       />
     </span>
   );
 
   return (
-    <div>
+    <div className='account'>
       {display}
       {modalButtons}
     </div>
