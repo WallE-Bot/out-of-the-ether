@@ -11,7 +11,23 @@ const Canvas = ({ mintHandler }) => {
 
   // constant depending on degree of width reduction in logo
   const horizSkew = .1;
-  let fromMid = 1;
+  let fromMid = -4;
+
+  const getRandomColor = () => {
+    const colors = [
+      '#FFC7FF',
+      '#FFAAFF',
+      '#FE8DFF',
+      '#DF70FF',
+      '#BF53FF',
+      '#9F33FF',
+      '#7F00FF'
+    ];
+
+    const randomIdx = Math.floor(Math.random() * colors.length);
+
+    return colors[randomIdx];
+  }
 
   const getMidPoints = () => {
     return {
@@ -20,23 +36,23 @@ const Canvas = ({ mintHandler }) => {
     };
   }
 
-  const drawAnimatedRectangle = (fromMid) => {
+  const drawAnimatedRectangle = () => {
+    //if (fromMid >= midWidth) { return; }
     const { midHeight, midWidth } = getMidPoints();
 
     context.beginPath();
     context.rect(midWidth-fromMid, midHeight-fromMid, fromMid * 2, fromMid * 2);
 
-    context.strokeStyle = 'purple';
+    context.strokeStyle = getRandomColor();
     context.lineWidth = 1;
-    context.shadowColor = 'purple';
+    context.shadowColor = getRandomColor();
     context.shadowBlur = 5;
     context.stroke();
-
-    requestAnimationFrame(fromMid + 5);
   }
 
   const drawETHLogo = () => {
     const { midHeight, midWidth } = getMidPoints();
+    const context = canvasRef.current.getContext('2d');
 
     context.beginPath();
     context.moveTo(midWidth, 0);
@@ -54,33 +70,72 @@ const Canvas = ({ mintHandler }) => {
     context.closePath();
 
     // styling
-    context.strokeStyle = 'white';
-    context.lineWidth = 1;
+    context.strokeStyle = 'black';
+    context.lineWidth = 0;
     context.shadowColor = 'white';
-    context.shadowBlur = 10;
+    context.shadowBlur = 5;
     context.stroke();
+  }
+
+  const renderFrame = () => {
+    const { midHeight, midWidth } = getMidPoints();
+
+    drawETHLogo();
+    if (fromMid < midWidth) {
+      fromMid += 5;
+    } else {
+      fromMid = -4;
+    }
+    drawAnimatedRectangle();
+    fromMid -= 2;
+    drawAnimatedRectangle();
+    fromMid += 1;
+    drawAnimatedRectangle();
+  }
+
+  const tick = () => {
+    if (!canvasRef.current) { return; }
+    const context = canvasRef.current.getContext('2d');
+    context.clearRect(0,0,width,height);
+    renderFrame();
+    requestAnimationFrame(tick);
   }
 
   // canvas internal
   useEffect(() => {
-    let unMounted = true;
-    if (canvasRef.current) {
-      const renderCtx = canvasRef.current.getContext('2d');
-
-      if (renderCtx) {
-        setContext(renderCtx);
-      };
-    };
+    /*
+    const { midHeight, midWidth } = getMidPoints();
 
     if(context) {
-      drawETHLogo();
-      drawAnimatedRectangle(fromMid);
-    };
+      let animationFrameId;
 
-    return () => cancelAnimationFrame();
+      const render = () => {
+        context.clearRect(0, 0, width, height);
+        fromMid += 5;
+        drawETHLogo();
+        drawAnimatedRectangle(fromMid);
+        animationFrameId = requestAnimationFrame(render);
+      }
+      render();
+
+      return () => {
+        cancelAnimationFrame(animationFrameId);
+      }
+      */
+    if (canvasRef.current) {
+      setContext(canvasRef.current.getContext('2d'));
+    }
+
+    if (context) {
+      requestAnimationFrame(tick);
+
+      return () => {
+        cancelAnimationFrame(requestAnimationFrame);
+      }
+    }
   });
 
-  // canvas dimensions
+  // responsive canvas dimensions
   useEffect(() => {
     const currentHeight = canvasRef.current.height;
     const currentWidth = canvasRef.current.width;
@@ -108,8 +163,7 @@ const Canvas = ({ mintHandler }) => {
         width={width}
         height={height}
         style={{
-          border: '1px solid green',
-          marginTop: 10,
+          border: '1px solid green'
         }}
       ></canvas>
       <button className='mint-button' onClick={mint}>mint</button>

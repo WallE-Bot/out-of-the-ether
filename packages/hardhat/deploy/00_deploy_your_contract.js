@@ -11,7 +11,6 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   });
 
   const OutOfTheEtherPrint = await ethers.getContract("OutOfTheEtherPrint", deployer);
-  console.log('get contract', OutOfTheEtherPrint);
   /*
     // Getting a previously deployed contract
     const YourContract = await ethers.getContract("YourContract", deployer);
