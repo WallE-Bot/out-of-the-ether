@@ -83,6 +83,7 @@ export default function useContractReader(contracts, contractName, functionName,
     contracts && contracts[contractName],
   );
 
+  console.log(contracts);
   if (tried === false && contracts && contracts[contractName]) {
     updateValue();
   }

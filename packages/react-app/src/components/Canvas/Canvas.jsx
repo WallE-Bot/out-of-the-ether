@@ -6,8 +6,64 @@ const Canvas = ({ mintHandler }) => {
 
   const canvasRef = useRef(null);
   const [context, setContext] = useState(null);
+  const [height, setHeight] = useState(600);
+  const [width, setWidth] = useState(600);
 
+  // constant depending on degree of width reduction in logo
+  const horizSkew = .1;
+  let fromMid = 1;
+
+  const getMidPoints = () => {
+    return {
+      midHeight: Math.floor(height/2),
+      midWidth: Math.floor(width/2),
+    };
+  }
+
+  const drawAnimatedRectangle = (fromMid) => {
+    const { midHeight, midWidth } = getMidPoints();
+
+    context.beginPath();
+    context.rect(midWidth-fromMid, midHeight-fromMid, fromMid * 2, fromMid * 2);
+
+    context.strokeStyle = 'purple';
+    context.lineWidth = 1;
+    context.shadowColor = 'purple';
+    context.shadowBlur = 5;
+    context.stroke();
+
+    requestAnimationFrame(fromMid + 5);
+  }
+
+  const drawETHLogo = () => {
+    const { midHeight, midWidth } = getMidPoints();
+
+    context.beginPath();
+    context.moveTo(midWidth, 0);
+
+    // top-right edge
+    context.lineTo(width - (width * horizSkew), midHeight);
+
+    // bottom-right edge
+    context.lineTo(midWidth, height);
+
+    // bottom-left edge
+    context.lineTo(0 + (width * horizSkew), midHeight);
+
+    // top-left edge
+    context.closePath();
+
+    // styling
+    context.strokeStyle = 'white';
+    context.lineWidth = 1;
+    context.shadowColor = 'white';
+    context.shadowBlur = 10;
+    context.stroke();
+  }
+
+  // canvas internal
   useEffect(() => {
+    let unMounted = true;
     if (canvasRef.current) {
       const renderCtx = canvasRef.current.getContext('2d');
 
@@ -16,70 +72,47 @@ const Canvas = ({ mintHandler }) => {
       };
     };
 
-    console.log(context);
     if(context) {
-      context.strokeStyle = "#FFFFFF";
-      context.strokeRect(245,245,10,10);
+      drawETHLogo();
+      drawAnimatedRectangle(fromMid);
     };
-  }, [context]);
 
-  const dataURIToBlob = (dataURI) => {
-    var binary = atob(dataURI.split(',')[1]);
-    var array = [];
-    for(var i = 0; i < binary.length; i++) {
-        array.push(binary.charCodeAt(i));
-    }
-    return new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
-  };
+    return () => cancelAnimationFrame();
+  });
+
+  // canvas dimensions
+  useEffect(() => {
+    const currentHeight = canvasRef.current.height;
+    const currentWidth = canvasRef.current.width;
+    const min = 600;
+    setHeight(currentHeight < min ? min : currentHeight);
+    setWidth(currentWidth < min ? min : currentWidth);
+  }, []);
 
   const convertCanvasToDataURL = () => {
-    console.log(context);
-    var dataUrl = context.canvas.toDataURL("image/jpeg");
-    console.log(dataUrl);
+    const dataUrl = context.canvas.toDataURL("image/jpeg");
     return dataUrl;
-    /*var blobData = dataURIToBlob(dataUrl);
-    console.log(blobData);
-    uploadImg(blobData);*/
   };
 
   const mint = async () => {
     const dataURL = convertCanvasToDataURL();
+    console.log(dataURL);
     const result = await mintHandler(dataURL);
-    console.log(result);
   }
-
-  /*
-  const uploadImg = async (blobData) => {
-    const config = {
-      bucketName: 'myBucket',
-      dirName: 'media',
-      region: 'eu-west-1',
-      accessKeyId: 'JAJHAFJFHJDFJSDHFSDHFJKDSF',
-      secretAccessKey: 'jhsdf99845fd98qwed42ebdyeqwd-3r98f373f=qwrq3rfr3rf',
-    }
-
-    const ReactS3Client = new S3(config);
-
-    const newFileName = 'test-file';
-
-    const data = await ReactS3Client.uploadFile(file, newFileName)
-    console.log(data);
-  }
-  */
 
   return (
     <>
       <canvas
         id="canvas"
         ref={canvasRef}
-        width={500}
-        height={500}
+        width={width}
+        height={height}
         style={{
-          border: '1px solid white',
+          border: '1px solid green',
           marginTop: 10,
         }}
       ></canvas>
-      <button onClick={mint}>mint</button>
+      <button className='mint-button' onClick={mint}>mint</button>
     </>
   );
 

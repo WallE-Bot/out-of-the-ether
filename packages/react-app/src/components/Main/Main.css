@@ -1,3 +1,9 @@
+main {
+  border: 1px solid red;
+  height: calc(100vh - var(--header-height));
+  padding: 0;
+}
+
 .mint-button {
   background: blue;
   color: white;

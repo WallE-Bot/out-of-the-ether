@@ -132,8 +132,7 @@ const logoutOfWeb3Modal = async () => {
 };
 
 function App(props) {
-  //const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
-  const mainnetProvider = mainnetInfura;
+  const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
@@ -658,6 +657,8 @@ function App(props) {
           <Route path="/main">
             <Main
               mintNFT={ (to, tokenURI) => {
+                {console.log('writeContracts', writeContracts)}
+                {console.log('readContracts', readContracts)}
                 return tx( writeContracts.OutOfTheEtherPrint.mintItem(
                   to,
                   tokenURI,
