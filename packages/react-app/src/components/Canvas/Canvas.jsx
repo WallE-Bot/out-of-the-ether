@@ -44,7 +44,7 @@ const Canvas = ({ mintHandler }) => {
     context.rect(midWidth-fromMid, midHeight-fromMid, fromMid * 2, fromMid * 2);
 
     context.strokeStyle = getRandomColor();
-    context.lineWidth = 1;
+    context.lineWidth = 2;
     context.shadowColor = getRandomColor();
     context.shadowBlur = 5;
     context.stroke();
@@ -73,7 +73,7 @@ const Canvas = ({ mintHandler }) => {
     context.strokeStyle = 'black';
     context.lineWidth = 0;
     context.shadowColor = 'white';
-    context.shadowBlur = 5;
+    context.shadowBlur = 15;
     context.stroke();
   }
 
@@ -82,14 +82,18 @@ const Canvas = ({ mintHandler }) => {
 
     drawETHLogo();
     if (fromMid < midWidth) {
-      fromMid += 5;
+      fromMid += 12;
     } else {
       fromMid = -4;
     }
     drawAnimatedRectangle();
-    fromMid -= 2;
+    fromMid -= 6;
     drawAnimatedRectangle();
-    fromMid += 1;
+    fromMid += 4;
+    drawAnimatedRectangle();
+    fromMid -= 6;
+    drawAnimatedRectangle();
+    fromMid += 4;
     drawAnimatedRectangle();
   }
 
@@ -103,25 +107,6 @@ const Canvas = ({ mintHandler }) => {
 
   // canvas internal
   useEffect(() => {
-    /*
-    const { midHeight, midWidth } = getMidPoints();
-
-    if(context) {
-      let animationFrameId;
-
-      const render = () => {
-        context.clearRect(0, 0, width, height);
-        fromMid += 5;
-        drawETHLogo();
-        drawAnimatedRectangle(fromMid);
-        animationFrameId = requestAnimationFrame(render);
-      }
-      render();
-
-      return () => {
-        cancelAnimationFrame(animationFrameId);
-      }
-      */
     if (canvasRef.current) {
       setContext(canvasRef.current.getContext('2d'));
     }
