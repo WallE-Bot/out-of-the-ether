@@ -12,6 +12,7 @@ const callbacks = {};
 const DEBUG = true;
 
 export default function Transactor(providerOrSigner, gasPrice, etherscan) {
+  console.log(providerOrSigner);
   if (typeof providerOrSigner !== "undefined") {
     // eslint-disable-next-line consistent-return
     return async (tx, callback) => {
@@ -29,7 +30,7 @@ export default function Transactor(providerOrSigner, gasPrice, etherscan) {
       }
 
       console.log("network", network);
-      
+
       var options = null;
       var notify = null;
       if(navigator.onLine){
@@ -45,11 +46,11 @@ export default function Transactor(providerOrSigner, gasPrice, etherscan) {
               possibleFunction(txInformation.transaction);
             }
           },
-        };  
+        };
 
         notify = Notify(options);
       }
-       
+
 
       let etherscanNetwork = "";
       if (network.name && network.chainId > 1) {
