@@ -56,31 +56,31 @@ module.exports = {
       */
     },
     rinkeby: {
-      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
+      url: `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     kovan: {
-      url: `https://kovan.infura.io/v3/${process.env.INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
+      url: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     mainnet: {
-      url: `https://mainnet.infura.io/v3/${process.env.INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
+      url: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     ropsten: {
-      url: `https://ropsten.infura.io/v3/${process.env.INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
+      url: `https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     goerli: {
-      url: `https://goerli.infura.io/v3/${process.env.INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
+      url: `https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: mnemonic(),
       },
