@@ -15,7 +15,6 @@ const Main = ({ mintNFT, dataSource }) => {
     const tokenURI = generateTokenURI(dataURL);
 
     const returned = await mintNFT(
-      '0xeF34d679Cb4217d1F7Bc81c02C4233D4Fd39566f',
       tokenURI
     );
   }

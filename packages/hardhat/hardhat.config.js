@@ -10,6 +10,10 @@ require("hardhat-deploy");
 require("@eth-optimism/hardhat-ovm");
 require("@nomiclabs/hardhat-ethers");
 
+const { resolve } = require("path");
+const { config: dotenvConfig } = require("dotenv");
+dotenvConfig({ path: resolve(__dirname,"./.env") });
+
 const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 
 /*
@@ -46,7 +50,6 @@ module.exports = {
   // REACT_APP_PROVIDER=https://dai.poa.network in packages/react-app/.env
   // (then your frontend will talk to your contracts on the live network!)
   // (you will need to restart the `yarn run start` dev server after editing the .env)
-
   networks: {
     localhost: {
       url: "http://localhost:8545",
@@ -392,7 +395,7 @@ task(
     qrcode.generate(address);
     console.log("‍📬 Deployer Account is " + address);
     for (let n in config.networks) {
-      //console.log(config.networks[n],n)
+      console.log(config.networks[n],n)
       try {
         let provider = new ethers.providers.JsonRpcProvider(
           config.networks[n].url

@@ -9,10 +9,9 @@ const { ethers } = require("ethers");
 // https://docs.blocknative.com/notify
 const callbacks = {};
 
-const DEBUG = true;
+const DEBUG = false;
 
 export default function Transactor(providerOrSigner, gasPrice, etherscan) {
-  console.log(providerOrSigner);
   if (typeof providerOrSigner !== "undefined") {
     // eslint-disable-next-line consistent-return
     return async (tx, callback) => {

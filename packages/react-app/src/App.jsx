@@ -8,7 +8,7 @@ import Web3Modal from "web3modal";
 import "./App.css";
 import { Account, Address, AddressInput, Contract, Main,
         Faucet, GasGauge, Header, Ramp } from "./components";
-import {INFURA_ID, NETWORK, NETWORKS } from "./constants";
+import {INFURA_ID, NETWORK, NETWORKS, ETHERSCAN_KEY } from "./constants";
 import { Transactor } from "./helpers";
 import {
   useBalance,
@@ -20,6 +20,7 @@ import {
   useOnBlock,
   useUserSigner,
 } from "./hooks";
+import { getDefaultProvider } from "@ethersproject/providers";
 
 const { BufferList } = require("bl");
 // https://www.npmjs.com/package/ipfs-http-client
@@ -48,30 +49,28 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.rinkeby; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS['rinkeby']; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = false;
-const NETWORKCHECK = true;
+const NETWORKCHECK = false;
 
 // helper function to "Get" from IPFS
 // you usually go content.toString() after this...
 const getFromIPFS = async hashToGet => {
   for await (const file of ipfs.get(hashToGet)) {
-    console.log(file.path);
     if (!file.content) continue;
     const content = new BufferList();
     for await (const chunk of file.content) {
       content.append(chunk);
     }
-    console.log(content);
     return content;
   }
 };
 
 // 🛰 providers
 if (DEBUG) console.log("📡 Connecting to Mainnet Ethereum");
-// const mainnetProvider = getDefaultProvider("mainnet", { infura: INFURA_ID, etherscan: ETHERSCAN_KEY, quorum: 1 });
+//const mainnetProvider = getDefaultProvider("mainnet", { infura: INFURA_ID, etherscan: ETHERSCAN_KEY, quorum: 1 });
 // const mainnetProvider = new InfuraProvider("mainnet",INFURA_ID);
 //
 // attempt to connect to our own scaffold eth rpc and if that fails fall back to infura...
@@ -82,7 +81,7 @@ const mainnetInfura = navigator.onLine ? new ethers.providers.StaticJsonRpcProvi
 
 // 🏠 Your local provider is usually pointed at your local blockchain
 const localProviderUrl = targetNetwork.rpcUrl;
-console.log(localProviderUrl);
+
 // as you deploy to other networks you can set REACT_APP_PROVIDER=https://dai.poa.network in packages/react-app/.env
 const localProviderUrlFromEnv = process.env.REACT_APP_PROVIDER ? process.env.REACT_APP_PROVIDER : localProviderUrl;
 if (DEBUG) console.log("🏠 Connecting to provider:", localProviderUrlFromEnv);
@@ -173,11 +172,6 @@ function App(props) {
     console.log(`⛓ A new mainnet block is here: ${mainnetProvider._lastBlockNumber}`);
   });
 
-  // Then read your DAI balance like:
-  const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
-    "0x34aA3F359A9D614239015126635CE7732c18fDF3",
-  ]);
-
   // keep track of a variable from the contract in the local React state:
   const balance = useContractReader(readContracts, "OutOfTheEtherPrint", "balanceOf", [address]);
   console.log("🤗 balance:", balance);
@@ -199,9 +193,7 @@ function App(props) {
         try {
           console.log("Getting token index", tokenIndex);
           const tokenId = await readContracts.OutOfTheEtherPrint.tokenOfOwnerByIndex(address, tokenIndex);
-          console.log("tokenId", tokenId);
           const tokenURI = await readContracts.OutOfTheEtherPrint.tokenURI(tokenId);
-          console.log("tokenURI", tokenURI);
 
           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
           console.log("ipfsHash", ipfsHash);
@@ -253,7 +245,6 @@ function App(props) {
       console.log("💵 yourMainnetBalance", yourMainnetBalance ? ethers.utils.formatEther(yourMainnetBalance) : "...");
       console.log("📝 readContracts", readContracts);
       console.log("🌍 DAI contract on mainnet:", mainnetContracts);
-      console.log("💵 yourMainnetDAIBalance", myMainnetDAIBalance);
       console.log("🔐 writeContracts", writeContracts);
     }
   }, [
@@ -308,7 +299,6 @@ function App(props) {
                         blockExplorerUrls: [targetNetwork.blockExplorer],
                       },
                     ];
-                    console.log("data", data);
                     const tx = await ethereum.request({ method: "wallet_addEthereumChain", params: data }).catch();
                     if (tx) {
                       console.log(tx);
@@ -424,9 +414,7 @@ function App(props) {
         <Switch>
           <Route path="/">
             <Main
-              mintNFT={ (to, tokenURI) => {
-                {console.log('writeContracts', writeContracts)}
-                {console.log('readContracts', readContracts)}
+              mintNFT={ (tokenURI) => {
                 return tx( writeContracts.OutOfTheEtherPrint.mintItem(
                   address,
                   tokenURI,
