@@ -115,8 +115,9 @@ const logoutOfWeb3Modal = async () => {
 };
 
 function App(props) {
-  const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
-  console.log(mainnetProvider);
+  //const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
+  const mainnetProvider = mainnetInfura;
+
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
   /* 💵 This hook will get the price of ETH from 🦄 Uniswap: */
@@ -427,7 +428,7 @@ function App(props) {
                 {console.log('writeContracts', writeContracts)}
                 {console.log('readContracts', readContracts)}
                 return tx( writeContracts.OutOfTheEtherPrint.mintItem(
-                  to,
+                  address,
                   tokenURI,
                   {gasLimit:400000}
                 ))
