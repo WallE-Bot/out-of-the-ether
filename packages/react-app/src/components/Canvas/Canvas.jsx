@@ -20,7 +20,10 @@ const Canvas = ({ mintHandler, toggleWalletHandler }) => {
       '#DF70FF',
       '#BF53FF',
       '#9F33FF',
-      '#7F00FF'
+      '#7F00FF',
+      '#C0E9EF',
+      '#C4D8F3',
+      '#C8C7F7',
     ];
 
     const randomIdx = Math.floor(Math.random() * colors.length);
