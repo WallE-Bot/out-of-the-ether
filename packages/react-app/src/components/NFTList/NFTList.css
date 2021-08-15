@@ -1,0 +1,16 @@
+.nft-list-container {
+  width: 85%;
+  height: 88%;
+  min-width: 600px;
+  margin: 0 auto;
+  margin-top: 50px;
+  border: 1px solid purple;
+  background: rgba(0,0,0,.9);
+  position: absolute;
+  left: 7.5%;
+}
+
+.nft-list {
+  list-style-type: none;
+  padding-left: 0;
+}

@@ -1,0 +1,16 @@
+.nft-item {
+  border: 1px solid #eee;
+  margin: 5px auto;
+  width: 450px;
+  color: white !important;
+}
+
+.nft-name {
+  margin: 0 5px;
+}
+
+.nft-item > img {
+  display: block;
+  width: 150px;
+  margin: 5px auto;
+}

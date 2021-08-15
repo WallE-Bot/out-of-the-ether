@@ -19,3 +19,5 @@ export { default as Wallet } from "./Wallet";
 export { default as L2Bridge } from "./L2Bridge";
 export { default as Main } from "./Main/Main.jsx";
 export { default as Canvas } from './Canvas/Canvas.jsx';
+export { default as NFTList } from "./NFTList/NFTList.jsx";
+export { default as NFTItem } from "./NFTItem/NFTItem.jsx";

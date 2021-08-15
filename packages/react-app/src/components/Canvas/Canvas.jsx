@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Canvas.css';
-import S3 from 'react-aws-s3';
 
-const Canvas = ({ mintHandler }) => {
+const Canvas = ({ mintHandler, toggleWalletHandler }) => {
 
   const canvasRef = useRef(null);
   const [context, setContext] = useState(null);
@@ -152,6 +151,7 @@ const Canvas = ({ mintHandler }) => {
           background: 'black'
         }}
       ></canvas>
+      <button className='wallet-button' onClick={toggleWalletHandler}>wallet</button>
       <button className='mint-button' onClick={mint}>mint</button>
     </>
   );

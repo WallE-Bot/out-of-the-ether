@@ -9,6 +9,8 @@ html {
 body {
   margin: 0;
   background: black;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 code {

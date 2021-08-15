@@ -51,7 +51,7 @@ const { ethers } = require("ethers");
 const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
-const DEBUG = true;
+const DEBUG = false;
 const NETWORKCHECK = true;
 
 // EXAMPLE STARTING JSON:
@@ -214,7 +214,7 @@ function App(props) {
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
         try {
-          console.log("GEtting token index", tokenIndex);
+          console.log("Getting token index", tokenIndex);
           const tokenId = await readContracts.OutOfTheEtherPrint.tokenOfOwnerByIndex(address, tokenIndex);
           console.log("tokenId", tokenId);
           const tokenURI = await readContracts.OutOfTheEtherPrint.tokenURI(tokenId);
@@ -440,67 +440,6 @@ function App(props) {
       {networkDisplay}
       <BrowserRouter>
         <Switch>
-          <Route exact path="/wallet">
-            {/*
-                🎛 this scaffolding is full of commonly used components
-                this <Contract/> component will automatically parse your ABI
-                and give you a form to interact with it locally
-            */}
-            <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-              <List
-                bordered
-                dataSource={outOfTheEtherPrints}
-                renderItem={item => {
-                  const id = item.id.toNumber();
-                  return (
-                    <List.Item key={id + "_" + item.uri + "_" + item.owner}>
-                      <Card
-                        title={
-                          <div>
-                            <span style={{ fontSize: 16, marginRight: 8 }}>#{id}</span> {item.name}
-                          </div>
-                        }
-                      >
-                        <div>
-                          <img src={item.image} style={{ maxWidth: 150 }} />
-                        </div>
-                        <div>{item.description}</div>
-                      </Card>
-
-                      <div>
-                        owner:{" "}
-                        <Address
-                          address={item.owner}
-                          ensProvider={mainnetProvider}
-                          blockExplorer={blockExplorer}
-                          fontSize={16}
-                        />
-                        <AddressInput
-                          ensProvider={mainnetProvider}
-                          placeholder="transfer to address"
-                          value={transferToAddresses[id]}
-                          onChange={newValue => {
-                            const update = {};
-                            update[id] = newValue;
-                            setTransferToAddresses({ ...transferToAddresses, ...update });
-                          }}
-                        />
-                        <Button
-                          onClick={() => {
-                            console.log("writeContracts", writeContracts);
-                            tx(writeContracts.OutOfTheEtherPrint.transferFrom(address, transferToAddresses[id], id));
-                          }}
-                        >
-                          Transfer
-                        </Button>
-                      </div>
-                    </List.Item>
-                  );
-                }}
-              />
-            </div>
-          </Route>
-
           <Route path="/">
             <Main
               mintNFT={ (to, tokenURI) => {
@@ -512,6 +451,7 @@ function App(props) {
                   {gasLimit:400000}
                 ))
               }}
+              dataSource={outOfTheEtherPrints || []}
             />
           </Route>
         </Switch>
