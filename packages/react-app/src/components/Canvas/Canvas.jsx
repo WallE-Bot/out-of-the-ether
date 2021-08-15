@@ -8,8 +8,12 @@ const Canvas = ({ mintHandler, toggleWalletHandler }) => {
   const [height, setHeight] = useState(600);
   const [width, setWidth] = useState(600);
 
-  // constant depending on degree of width reduction in logo
-  const horizSkew = .25;
+  /*
+    logo drawing offset to ensure height/width proportions
+  */
+  const biDirectionalOffset = (.33/2) * height;
+
+  // rectangle grow animation scaling
   let fromMid = -4;
 
   const getRandomColor = () => {
@@ -61,13 +65,13 @@ const Canvas = ({ mintHandler, toggleWalletHandler }) => {
     context.moveTo(midWidth, 0);
 
     // top-right edge
-    context.lineTo(width - (width * horizSkew), midHeight);
+    context.lineTo(midWidth + biDirectionalOffset, midHeight);
 
     // bottom-right edge
     context.lineTo(midWidth, height);
 
     // bottom-left edge
-    context.lineTo(0 + (width * horizSkew), midHeight);
+    context.lineTo(midWidth - biDirectionalOffset, midHeight);
 
     // top-left edge
     context.closePath();
@@ -85,7 +89,7 @@ const Canvas = ({ mintHandler, toggleWalletHandler }) => {
 
     drawETHLogo();
     if (fromMid < midWidth) {
-      fromMid += 12;
+      fromMid += 11;
     } else {
       fromMid = -4;
     }
@@ -123,7 +127,7 @@ const Canvas = ({ mintHandler, toggleWalletHandler }) => {
     }
   });
 
-  // responsive canvas dimensions
+  // responsive canvas dimensions, minimum 600px square
   useEffect(() => {
     const currentHeight = canvasRef.current.height;
     const currentWidth = canvasRef.current.width;
