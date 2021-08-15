@@ -6,7 +6,6 @@ import { uuid } from 'uuidv4';
 const NFTList = ({ dataSource }) => {
 
   const generateNFTItemList = () => {
-    console.log(dataSource);
     const list = dataSource
       .map(dataObj => {
           return <NFTItem key={uuid()} data={dataObj} />

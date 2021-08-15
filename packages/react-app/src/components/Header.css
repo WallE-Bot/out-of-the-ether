@@ -23,6 +23,9 @@ a {
   color: white;
 }
 
-.logo {
+.logo-text {
   width: 50px;
+  color: purple;
+  margin: 5px;
+  font-size: 16px;
 }

@@ -4,10 +4,11 @@
   min-width: 600px;
   margin: 0 auto;
   margin-top: 50px;
-  border: 1px solid purple;
   background: rgba(0,0,0,.9);
   position: absolute;
   left: 7.5%;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 
 .nft-list {

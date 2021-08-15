@@ -1,8 +1,9 @@
 .nft-item {
   border: 1px solid #eee;
-  margin: 5px auto;
+  margin: 15px auto;
   width: 450px;
   color: white !important;
+  border-radius: 15px;
 }
 
 .nft-name {

@@ -27,6 +27,7 @@ export default function Header({
         }}
         to="/"
       >
+        <span className='logo-text'>out of the ether</span>
       </Link>
     );
   };
